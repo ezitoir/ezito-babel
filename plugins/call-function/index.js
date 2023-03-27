@@ -4,7 +4,7 @@ const createfunctionTemplate = require('ezito-babel/utils/create-function-templa
 const functionNameCreator = require('ezito-babel/utils/function-name-creator');
 const isVariableDefined = require('ezito-babel/utils/is-variable-defined'); 
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
-const { prepare : prepareAddImport } = require('ezit-babel/utils/import');
+const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
 const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
 const visitor = {
     create({ template , types : t },{opts}){
