@@ -1,10 +1,12 @@
 'use strict'; 
-const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
-const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
-const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
+ 
 const getPeropertyNames = require('ezito-babel/utils/get-expression-property-names');
 const isAssignmentExpression = require('ezito-babel/utils/is-assignment-expression');
 const getScopeType = require('ezito-babel/utils/get-scope-type');
+const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
+const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
+const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
+const { prepare : prepareInsertFunction } = require('ezito-babel/utils/insert-function');
 
 const visitor = { 
     create({ template , types : t } ,{opts}){ 
@@ -126,6 +128,7 @@ const visitor = {
                             delete require.cache[fileName]; 
                         }
                         const prepare = opts.prepareCommonJSExport.call(nodePath , nodePath , fileName , {
+                            addFunction : prepareInsertFunction(nodePath , template ,t),
                             addImport : prepareAddImport(nodePath,t),
                             addSource : prepareAddSource(nodePath ,template,t),
                             addVariable : prepareInsertVariable(nodePath,t),

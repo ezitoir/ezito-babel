@@ -1,30 +1,27 @@
-'use strict'; 
-const getProgram = require('ezito-babel/utils/get-program');
-const createfunctionTemplate = require('ezito-babel/utils/create-function-template');
-const functionNameCreator = require('ezito-babel/utils/function-name-creator');
-const isVariableDefined = require('ezito-babel/utils/is-variable-defined');
+'use strict';  
+const functionNameCreator = require('ezito-babel/utils/function-name-creator'); 
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
 const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
 const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
+const { prepare : prepareInsertFunction } = require('ezito-babel/utils/insert-function');
+
 const visitor = { 
     create({ template , types : t } ,{opts}){ 
         return { 
             ImportDeclaration ( nodePath , { opts , file }){
+                prepareInsertFunction(nodePath,template,t)(function name1(){})
                 if(typeof opts !== 'object') return ;
                 if(typeof opts.prepareImportDeclaration !== 'function') return;
                 const declaration = nodePath.get('declaration');
                 const modulePath = declaration.parent.source.value ; 
                 const fileName = file.opts.filename || opts.fileName;   
-                const prepare = opts.prepareImportDeclaration.call(nodePath , nodePath ,modulePath, fileName ,{
-                    addFucntion : insertFn(t,nodePath ),
+                const prepare = opts.prepareImportDeclaration.call(nodePath,nodePath,modulePath, fileName ,{
+                    addFunction: prepareInsertFunction(nodePath,template,t),
                     addImport : prepareAddImport(nodePath,t),
                     addSource : prepareAddSource(nodePath ,template,t),
                     addVariable : prepareInsertVariable(nodePath,t),
                 });
-                if(typeof prepare !== "object") return ;
-                const program = getProgram(nodePath );
-                const { node , scope } = nodePath ;
-                const { bindings , parent } = scope;
+                if(typeof prepare !== "object") return ; 
                 if(declaration.parent.specifiers.length === 0 ){ 
                     if(typeof prepare.Import === "function" ){
                         const { functionName , newModulePath } = prepare.Import.call(nodePath , modulePath) || {};
@@ -47,8 +44,7 @@ const visitor = {
                     let importName = []; 
                     var newPath = '';
                     var newName , temp , importType = '';
-                    for (const childNode of declaration.parent.specifiers) {  
-
+                    for (const childNode of declaration.parent.specifiers) {
                         if(childNode.type === 'ImportDefaultSpecifier'){
                             importType = 'ImportDefault';
                             if(childNode.imported){
@@ -91,18 +87,7 @@ const visitor = {
         }
     }
 }
-function insertFn ( template , nodePath ){
-    return function _init(opts){
-        const functionDeclaration = createfunctionTemplate( template , nodePath , opts , nodePath.parent );
-        const programNode = getProgram(nodePath);
-        for (const iterator of functionDeclaration) {
-            const { functionName , templateDeclaration } = iterator;
-            if(!templateDeclaration) continue ; 
-            if(isVariableDefined(programNode, functionName)) continue ;  
-            programNode.unshiftContainer("body", templateDeclaration); 
-        } 
-    }
-}; 
+ 
 
 const importDeclaration =  function ({ template , types : t } ,{opts}){  
     return { 

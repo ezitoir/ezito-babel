@@ -5,7 +5,9 @@ const functionNameCreator = require('ezito-babel/utils/function-name-creator');
 const isVariableDefined = require('ezito-babel/utils/is-variable-defined'); 
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
 const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
-const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
+const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable'); 
+const { prepare : prepareInsertFunction } = require('ezito-babel/utils/insert-function');
+
 const visitor = {
     create({ template , types : t },{opts}){
         const addSourceList = {
@@ -26,7 +28,7 @@ const visitor = {
                     const type = nodePath.node.callee.type;
                     const name = nodePath.node.callee.name;  
                     const prepare = opts.prepareCallFunction.call(nodePath, nodePath , fileName , {
-                        addFunction : {},
+                        addFunction : prepareInsertFunction(nodePath,template,t),
                         addSource : prepareAddSource(nodePath,template,t),
                         addImport : prepareAddImport(nodePath,t),
                         addVariable : prepareInsertVariable(nodePath,t),

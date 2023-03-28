@@ -1,9 +1,9 @@
-'use strict'; 
-const getProgram = require('ezito-babel/utils/get-program'); 
+'use strict';   
 const isFunctionDefined = require('ezito-babel/utils/is-function-defined');
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
 const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
-const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
+const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable'); 
+const { prepare : prepareInsertFunction } = require('ezito-babel/utils/insert-function');
 const path = require('path');
 function makeId( count = 5 , characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' ) {
     var result = String('');
@@ -20,6 +20,7 @@ const visitor = {
                 if(typeof opts.prepareExportDeclaration !== 'function') return;
                 const fileName = file.opts.filename || opts.fileName ;  
                 const prepare = opts.prepareExportDeclaration.call(nodePath , nodePath , fileName , {
+                    addFunction : prepareInsertFunction(node ,template,t),
                     addImport : prepareAddImport(nodePath,t),
                     addSource : prepareAddSource(nodePath ,template,t),
                     addVariable : prepareInsertVariable(nodePath,t),
