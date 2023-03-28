@@ -44,44 +44,41 @@ const visitor = {
                     }
                 }
                 else {
-                    let importName = [];
+                    let importName = []; 
                     var newPath = '';
-                    var newName , temp ;
+                    var newName , temp , importType = '';
                     for (const childNode of declaration.parent.specifiers) {  
+
                         if(childNode.type === 'ImportDefaultSpecifier'){
-                            if(typeof prepare.ImportDefault === "function" ){
-                                const { functionName , newModulePath } = prepare.ImportDefault.call(nodePath , modulePath) || {};
-                                if(!functionName) return ;
-                                [ newName , temp ] = functionNameCreator( functionName || 'requrie' , 'VALUES');
-                                newPath = newModulePath || modulePath;
-                                if(childNode.imported){
-                                    if( childNode.local.name  === childNode.imported.name )
-                                    importName.push(childNode.local.name );
-                                    else
-                                    importName.push(childNode.imported.name + ' : ' + childNode.local.name);
-                                }
-                                else {
-                                    importName.push('default : ' + childNode.local.name)
-                                }
-                            } 
-                        }
-                        else if(childNode.type ==='ImportSpecifier'){
-                            if(typeof prepare.ImportWithCards === "function" ){
-                                const { functionName , newModulePath } = prepare.ImportWithCards.call(nodePath , modulePath) || {};
-                                if(!functionName) return ;
-                                [ newName , temp ] = functionNameCreator( functionName || 'requrie' , 'VALUES');
-                                newPath = newModulePath || modulePath;
-                                if(childNode.imported){
-                                    if( childNode.local.name  === childNode.imported.name )
-                                    importName.push(childNode.local.name);
-                                    else
-                                    importName.push(childNode.imported.name + ' : ' + childNode.local.name);
-                                }
-                                else {
-                                    importName.push('default : ' + childNode.name );
-                                }
+                            importType = 'ImportDefault';
+                            if(childNode.imported){
+                                if( childNode.local.name  === childNode.imported.name )
+                                importName.push(childNode.local.name );
+                                else
+                                importName.push(childNode.imported.name + ' : ' + childNode.local.name);
+                            }
+                            else {
+                                importName.push('default : ' + childNode.local.name)
                             }
                         }
+                        else if(childNode.type ==='ImportSpecifier'){
+                            importType = 'ImportWithCards';
+                            if(childNode.imported){
+                                if( childNode.local.name  === childNode.imported.name )
+                                importName.push(childNode.local.name);
+                                else
+                                importName.push(childNode.imported.name + ' : ' + childNode.local.name);
+                            }
+                            else {
+                                importName.push('default : ' + childNode.name );
+                            }
+                        } 
+                    }
+                    if(typeof prepare[importType] === "function"){
+                        const { functionName , newModulePath } = prepare[importType].call(nodePath , modulePath) || {};
+                        if(!functionName) return ;
+                        [ newName , temp ] = functionNameCreator( functionName || 'requrie' , 'VALUES');
+                        newPath = newModulePath || modulePath;
                     }
                     if(importName.length > 0){ 
                         nodePath.replaceWith(template('VALUES')({
