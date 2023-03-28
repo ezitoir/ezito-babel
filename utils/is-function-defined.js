@@ -11,7 +11,7 @@ module.exports = function isFunctionDefined(nodePath, name , type){
     var newNode = {}; 
     var is = body.some(function(node){ 
         if(node.type === 'FunctionDeclaration'){
-            newNode = node ; 
+            newNode = node;
             return node.id.name === name; 
         } 
         return false;

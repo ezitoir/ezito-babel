@@ -36,7 +36,7 @@ module.exports = function ( template , nodePath , opts = Object , parent = undef
                 },]
             ]
         });
-        if(isFunctionDefined( name , parent || node )) return  {templateDeclaration:false};
+        if(isFunctionDefined( name , parent || node )) return  { templateDeclaration : false };
         return {
             functionName : fn_name ,
             templateDeclaration : new_fn_template

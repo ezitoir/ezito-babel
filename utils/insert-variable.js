@@ -11,7 +11,7 @@ const getProgram = require('ezito-babel/utils/get-program');
  * @param {*} option = { insert : "insertBefore" || "insertAfter" , "pushContainer"}
  * @returns 
  */
-module.exports.default = function insertVariable(nodePath,types,kind,name,value, option = { insert : 'insertBefore'}){
+module.exports.default = function insertVariable(nodePath, types,kind,name,value, option = { insert : 'insertBefore'}){
     if(isVariableDefined(nodePath.parentPath,name)) return;
     const template = value instanceof String ? types.stringLiteral : types.identifier;
     const program = getProgram(nodePath);
@@ -41,7 +41,7 @@ module.exports.default = function insertVariable(nodePath,types,kind,name,value,
                 program.pushContainer('body' , path)
             }
         ],
-    }
+    };
     const [ context , inserter ] = fn[option.insert]; 
     const newVar = types.variableDeclaration(kind,[
         types.variableDeclarator(
