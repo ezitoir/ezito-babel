@@ -1,5 +1,6 @@
 'use strict';   
 const isFunctionDefined = require('ezito-babel/utils/is-function-defined');
+const ezitoTypes = require('ezito-utils/public/validators/types');
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
 const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
 const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable'); 
@@ -15,10 +16,12 @@ function makeId( count = 5 , characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk
 const visitor = { 
     create({ template , types : t } ,{opts}){
         return {
-            ExportDeclaration ( nodePath ,{ opts , file }){
-                if(typeof opts !== 'object') return ;
-                if(typeof opts.prepareExportDeclaration !== 'function') return;
-                const fileName = file.opts.filename || opts.fileName ;  
+            ExportDeclaration ( nodePath ,{ opts , file }){ 
+                const fileName = file.opts.filename || opts.fileName ; 
+                if(!ezitoTypes.object(opts)) return ;
+                if(!ezitoTypes.function(opts.prepareExportDeclaration)) return; 
+                if(!ezitoTypes.oneOfType(ezitoTypes.string,ezitoTypes.undefined)(opts.fileName)) return; 
+                
                 const prepare = opts.prepareExportDeclaration.call(nodePath , nodePath , fileName , {
                     addFunction : prepareInsertFunction(node ,template,t),
                     addImport : prepareAddImport(nodePath,t),

@@ -21,7 +21,7 @@ module.exports = function ({ template , types : t } ,{opts}){
                     addSource   : prepareAddSource(nodePath ,template,t),
                     addVariable : prepareInsertVariable(nodePath,t),
                 });
-                if(!(ezitoTypes.function( resultPrepareInsertFunction) || ezitoTypes.array(resultPrepareInsertFunction,[ezitoTypes.oneOfType(ezitoTypes.string,ezitoTypes.function)]) || ezitoTypes.string(resultPrepareInsertFunction))) return;
+                if(!(ezitoTypes.function(resultPrepareInsertFunction) || ezitoTypes.array(resultPrepareInsertFunction,[ezitoTypes.oneOfType(ezitoTypes.string,ezitoTypes.function)]) || ezitoTypes.string(resultPrepareInsertFunction))) return;
                 
                 if(ezitoTypes.function( resultPrepareInsertFunction)){
                     prepareInsertFunction(nodePath,template,t)(resultPrepareInsertFunction,{insert:'unshiftContainer'})
