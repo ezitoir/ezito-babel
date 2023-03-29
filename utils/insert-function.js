@@ -1,5 +1,6 @@
 'use strict';
 const isFunctionDefined = require('ezito-babel/utils/is-function-defined');
+const isString = require('ezito-utils/public/is/string');
 const getFunctionName = require('ezito-utils/public/object/get-fn-name');
 const getProgram = require('ezito-babel/utils/get-program');
 const makeError = require('ezito-utils/public/make-error');
@@ -14,7 +15,7 @@ function insertFucntion (nodePath,template,types,fn,option = { insert : 'insertB
                 nodePath.insertBefore(path)
             }
         ],
-        "insertBefore" : [
+        "insertAfter" : [
             types ,
             function(path){
                 nodePath.insertAfter (path)
@@ -41,9 +42,9 @@ function insertFucntion (nodePath,template,types,fn,option = { insert : 'insertB
     var [ context , inserter ] = insertFn[option.insert]; 
     var program = getProgram(nodePath);
     var newFnTemplateemplate = '';
-    
+     
     if(!isFunctionDefined(nodePath, getFunctionName(fn))){
-        babel.transformSync(Function.prototype.toString.call(fn), {
+        babel.transformSync(isString(fn) ? fn : Function.prototype.toString.call(fn), {
             plugins : [
                 [function(){
                     return {
@@ -51,7 +52,7 @@ function insertFucntion (nodePath,template,types,fn,option = { insert : 'insertB
                             FunctionDeclaration(path){
                                 const { node } = path; 
                                 var name =  node.id.name;
-                                var params =  node.params;
+                                var params =  node.params; 
                                 var body = babelTypes.blockStatement( node.body.body ) || node.body ; 
                                 newFnTemplateemplate = babelTypes.functionDeclaration( 
                                     babelTypes.identifier(name),
@@ -67,8 +68,7 @@ function insertFucntion (nodePath,template,types,fn,option = { insert : 'insertB
         if(babelTypes.isFunctionDeclaration(newFnTemplateemplate)){ 
             inserter.call(nodePath , newFnTemplateemplate);
             return true;
-        }
-        return false;
+        } 
     } 
     return false
 }
