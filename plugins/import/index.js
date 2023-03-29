@@ -1,5 +1,6 @@
 'use strict';  
 const functionNameCreator = require('ezito-babel/utils/function-name-creator'); 
+const ezitoTypes = require('ezito-utils/public/validators/types'); 
 const { prepare : prepareAddSource } = require('ezito-babel/utils/add-source');
 const { prepare : prepareAddImport } = require('ezito-babel/utils/import');
 const { prepare : prepareInsertVariable } = require('ezito-babel/utils/insert-variable');
@@ -9,16 +10,16 @@ const visitor = {
     create({ template , types : t } ,{opts}){ 
         return { 
             ImportDeclaration ( nodePath , { opts , file }){
-                prepareInsertFunction(nodePath,template,t)(function name1(){})
-                if(typeof opts !== 'object') return ;
-                if(typeof opts.prepareImportDeclaration !== 'function') return;
                 const declaration = nodePath.get('declaration');
                 const modulePath = declaration.parent.source.value ; 
                 const fileName = file.opts.filename || opts.fileName;   
+                if(!ezitoTypes.object(opts)) return ;
+                if(!ezitoTypes.function(opts.prepareInsertFunction)) return; 
+                if(!ezitoTypes.oneOfType(ezitoTypes.string,ezitoTypes.undefined)(opts.fileName)) return; 
                 const prepare = opts.prepareImportDeclaration.call(nodePath,nodePath,modulePath, fileName ,{
-                    addFunction: prepareInsertFunction(nodePath,template,t),
-                    addImport : prepareAddImport(nodePath,t),
-                    addSource : prepareAddSource(nodePath ,template,t),
+                    addFunction : prepareInsertFunction(nodePath,template,t),
+                    addImport   : prepareAddImport(nodePath,t),
+                    addSource   : prepareAddSource(nodePath ,template,t),
                     addVariable : prepareInsertVariable(nodePath,t),
                 });
                 if(typeof prepare !== "object") return ; 
