@@ -1,4 +1,4 @@
-
+ 
 
 module.exports = function functionNameCreator(functionNameList , templateKey = 'ARGUMENTS'){
     functionNameList = functionNameList instanceof Array ? functionNameList : [ functionNameList ];
