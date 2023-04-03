@@ -1,4 +1,11 @@
-# ezito-babel
+# EzitoIR ezito-utils
+
+## Installation
+
+    npm install https://github.com/ezitoir/ezito-utils.git
+    npm install ezito-utils
+    
+## Usage
 
 ```js
 const babel = require('@babel/core');

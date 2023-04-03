@@ -1,18 +1,41 @@
 {
-    "name" : "ezito-babel",
-    "varsion" : "1.0.0",
-    "main" : "./",
-    "dependencies": {
-        "ezito-utils": "github:ezitoir/ezito-utils" ,
-        "@babel/core": "^7.21.3"
-    },
-    "keyword" : [
-        "babel" ,
-        "export",
-        "import" ,
-        "commonJs export" ,
-        "babel addVaribale",
-        "babel addFunction",
-        "esModule" 
-    ]
+  "name": "ezito-babel-plugins",
+  "version": "1.0.1",
+  "description": "ezito babel plugin help you for beter customize babel parser",
+  "main": " ",
+  "keyword" : [
+    "babel" ,
+    "export",
+    "import" ,
+    "commonJs export" ,
+    "babel addVaribale",
+    "babel addFunction",
+    "esModule" ,
+    "plugins"
+  ],
+  "files": [
+    "LICENSE",
+    "History.md",
+    "README.md", 
+    "plugins/",
+    "types/",
+    "utils/"
+  ],
+  "dependencies": {
+    "ezito-utils": "^1.0.0",
+    "@babel/core": "^7.21.3"
+  },
+  "scripts": {
+    "test": "echo \" no test specified\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezitoir/ezito-babel-plugins.git"
+  },
+  "author": "Muhammad Ali Aghajanpour",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezitoir/ezito-babel-plugins/issues"
+  },
+  "homepage": "https://github.com/ezitoir/ezito-babel-plugins#readme"
 }
