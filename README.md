@@ -1,4 +1,4 @@
-# EzitoIR ezito-utils
+# ezito-babel-plugins
 
 ## Installation
 
