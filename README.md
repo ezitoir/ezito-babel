@@ -2,8 +2,8 @@
 
 ## Installation
 
-    npm install https://github.com/ezitoir/ezito-utils.git
-    npm install ezito-utils
+    npm install https://github.com/ezitoir/ezito-babel-plugins.git
+    npm install ezito-babel-plugins
     
 ## Usage
 
